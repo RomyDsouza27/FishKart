@@ -1,0 +1,52 @@
+{% load static %}
+{% load crispy_forms_tags %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - FishKart</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="{% static 'css/navbar.css' %}" />
+</head>
+<body>
+    <nav class="navbar navbar-light bg-dark" style="color: white;">
+        <h3>Login</h3>
+    </nav>
+
+    <div class="container-fluid">
+        <div class="row no-gutters">
+            <!-- The image half -->
+            <div class="col-md-6 d-none d-md-flex bg-image">
+                <img src="{% static 'media/image.jpg' %}" alt="Background" class="img-fluid" />
+            </div>
+
+            <!-- The content half -->
+            <div class="col-md-6">
+                <div class="login d-flex align-items-center py-5">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-lg-10 col-xl-7 mx-auto">
+                                <h3 class="display-4">FishKart</h3>
+                                <p class="text-muted mb-4">LOGIN</p>
+                                <form method="POST">
+                                    {% csrf_token %}
+                                    <div class="form-group">
+                                        {{ login_form|crispy }}
+                                    </div>
+                                    <button type="submit"
+                                        class="btn btn-primary btn-block text-uppercase mb-2 rounded-pill shadow-sm">
+                                        Sign in
+                                    </button>
+                                    <a href="{% url 'fishkart:register' %}">Sign Up</a>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

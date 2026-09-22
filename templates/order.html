@@ -1,0 +1,203 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Summary - FishKart</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="{% static 'css/modal.css' %}">
+    <link rel="stylesheet" href="{% static 'css/navbar.css' %}">
+    <style>
+        .order-summary-container {
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .card {
+            transition: transform 0.2s;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        .btn-pay {
+            background-color: #007bff;
+            color: white;
+            font-weight: bold;
+            padding: 10px 20px;
+            border-radius: 5px;
+        }
+
+        .btn-pay:hover {
+            background-color: #0056b3;
+        }
+
+        .empty-cart {
+            text-align: center;
+            padding: 50px;
+            background-color: #f8f9fa;
+            border-radius: 10px;
+        }
+
+        .fish-image {
+            width: 50px;
+            height: 50px;
+            object-fit: cover;
+            border-radius: 5px;
+            margin-right: 15px;
+            vertical-align: middle;
+        }
+
+        .list-group-item {
+            display: flex;
+            align-items: center;
+        }
+    </style>
+    <script src="{% static 'js/firebase.js' %}"></script>
+    <script src="{% static 'js/successorder.js' %}"></script>
+    <script src="{% static 'js/order.js' %}"></script>
+</head>
+
+<body>
+    <nav class="navbar background">
+        <ul class="nav-list">
+            <li><a href="{% url 'fishkart:home' %}">Home <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                        fill="currentColor" class="bi bi-house-fill" viewBox="0 0 16 16">
+                        <path fill-rule="evenodd"
+                            d="m8 3.293 6 6V13.5a1.5 1.5 0 0 1-1.5 1.5h-9A1.5 1.5 0 0 1 2 13.5V9.293l6-6zm5-.793V6l-2-2V2.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5z" />
+                        <path fill-rule="evenodd"
+                            d="M7.293 1.5a1 1 0 0 1 1.414 0l6.647 6.646a.5.5 0 0 1-.708.708L8 2.207 1.354 8.854a.5.5 0 1 1-.708-.708L7.293 1.5z" />
+                    </svg></a></li>
+            <li><a href="{% url 'fishkart:trackorders' %}">Track <svg xmlns="http://www.w3.org/2000/svg" width="16"
+                        height="16" fill="currentColor" class="bi bi-geo-alt-fill" viewBox="0 0 16 16">
+                        <path
+                            d="M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10zm0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6z" />
+                    </svg></a></li>
+            <li><a href="{% url 'fishkart:mycart' %}">Cart <svg xmlns="http://www.w3.org/2000/svg" width="16"
+                        height="16" fill="currentColor" class="bi bi-cart" viewBox="0 0 16 16">
+                        <path
+                            d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM3.102 4l1.313 7h8.17l1.313-7H3.102zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2z" />
+                    </svg></a></li>
+            <li><a href="{% url 'fishkart:past_order_list' %}">Past Orders <svg xmlns="http://www.w3.org/2000/svg"
+                        width="16" height="16" fill="currentColor" class="bi bi-file-earmark-text" viewBox="0 0 16 16">
+                        <path
+                            d="M5.5 7a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1h-5zM5 9.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5zm0 2a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5z" />
+                        <path
+                            d="M9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V4.5L9.5 0zm0 1v2A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h5.5z" />
+                    </svg></a></li>
+            <li><a class="nav-link" href="{% url 'fishkart:logout' %}">Logout<svg xmlns="http://www.w3.org/2000/svg"
+                        width="16" height="16" fill="currentColor" class="bi bi-arrow-left-circle-fill"
+                        viewBox="0 0 16 16">
+                        <path
+                            d="M8 0a8 8 0 1 0 0 16A8 8 0 0 0 8 0zm3.5 7.5a.5.5 0 0 1 0 1H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H11.5z" />
+                    </svg></a></li>
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+            <li>{% if user.is_authenticated %}
+                <a style="color:white" class="navbar-brand" href="{% url 'fishkart:home' %}">{{ user.username }}<svg
+                        xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                        class="bi bi-file-person" viewBox="0 0 16 16">
+                        <path
+                            d="M12 1a1 1 0 0 1 1 1v10.755S12 11 8 11s-5 1.755-5 1.755V2a1 1 0 0 1 1-1h8zM4 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H4z" />
+                        <path d="M8 10a3 3 0 1 0 0-6 3 3 0 0 0 0 6z" />
+                    </svg></a>
+                {% endif %}
+            </li>
+        </ul>
+    </nav>
+
+    <div class="order-summary-container">
+        <h1 class="mb-4">Order Summary</h1>
+        <p class="lead">Customer: {{ info.cust_name }} (ID: {{ info.cust_id }})</p>
+
+        {% if rests %}
+        {% for rest_id, rest in rests.items %}
+        <div class="card mb-4 shadow-sm">
+            <div class="card-body">
+                <h2 class="card-title">{{ rest.rest_name }}</h2>
+                <ul class="list-group list-group-flush">
+                    {% for item_name, item in rest.items.items %}
+                    <li class="list-group-item">
+                        <img src="{{ item.fish_image }}" class="fish-image" alt="{{ item_name }}">
+                        {{ item_name }} - {{ item.quantity }} x {{ item.weight }} grams - ₹{{ item.price }}
+                    </li>
+                    {% endfor %}
+                </ul>
+                <p class="mt-3"><strong>Pickup Location:</strong> {{ rest.address }}</p>
+            </div>
+        </div>
+        {% endfor %}
+        <div class="card mb-4">
+            <div class="card-body">
+                <p class="card-text"><strong>Subtotal:</strong> ₹{{ subtotal }}</p>
+                <p class="card-text"><strong>Total:</strong> ₹{{ total }}</p>
+            </div>
+        </div>
+        {{ rests|json_script:"rests-data" }}
+        <form action="{% url 'fishkart:successorder' %}" method="POST" id="razorpay-form">
+            {% csrf_token %}
+            <input type="hidden" name="razorpay_payment_id" id="razorpay_payment_id">
+            <input type="hidden" name="razorpay_order_id" id="razorpay_order_id" value="{{ razorpay_order_id }}">
+            <input type="hidden" name="razorpay_signature" id="razorpay_signature">
+            <button type="submit" id="rzp-button" class="btn btn-pay">Pay with Razorpay</button>
+        </form>
+        {% else %}
+        <div class="empty-cart">
+            <h3>Your cart is empty.</h3>
+            <p>Add some delicious items to your cart and come back to place your order!</p>
+            <a href="{% url 'fishkart:home' %}" class="btn btn-primary">Shop Now</a>
+        </div>
+        {% endif %}
+    </div>
+
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <script>
+        const rests = JSON.parse(document.getElementById('rests-data').textContent);
+        var options = {
+            "key": "{{ razorpay_key_id }}",
+            "amount": {{ total_amount_paise }},
+        "currency": "INR",
+            "name": "fishkart",
+                "order_id": "{{ razorpay_order_id }}",
+                    "handler": function(response) {
+                        document.getElementById('razorpay_payment_id').value = response.razorpay_payment_id;
+                        document.getElementById('razorpay_order_id').value = response.razorpay_order_id;
+                        document.getElementById('razorpay_signature').value = response.razorpay_signature;
+                        fetch("{% url 'fishkart:successorder' %}", {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRFToken': '{{ csrf_token }}'
+                            },
+                            body: JSON.stringify({
+                                razorpay_payment_id: response.razorpay_payment_id,
+                                razorpay_order_id: response.razorpay_order_id,
+                                razorpay_signature: response.razorpay_signature,
+                                rests: rests,
+                                payment_method: 'razorpay',
+                                shipping_info: {}
+                            })
+                        }).then(response => response.json())
+                            .then(data => {
+                                if (data.status === 'success') {
+                                    window.location.href = '/home/';
+                                } else {
+                                    alert(data.error);
+                                }
+                            });
+                    }
+    };
+        var rzp = new Razorpay(options);
+        document.getElementById('rzp-button').onclick = function (e) {
+            rzp.open();
+            e.preventDefault();
+        };
+    </script>
+</body>
+
+</html>
