@@ -56,7 +56,14 @@ Schema is normalized to 3NF with primary/foreign key constraints, `CHECK` and `N
 
 ## Screenshots
 
-*(Add screenshots of the homepage, login page, product detail page, cart, and checkout here — see project report for reference layouts.)*
+*<img width="1103" height="817" alt="image" src="https://github.com/user-attachments/assets/1d67e0a7-b8ca-48aa-a4fb-78297d9e185f" /> <img width="1117" height="579" alt="image" src="https://github.com/user-attachments/assets/b2a43182-2ac9-4e54-8567-c47cb5639c65" /> <img width="1093" height="1212" alt="image" src="https://github.com/user-attachments/assets/13b2e6ec-2c65-4a43-b136-d0fdc15b6204" /> <img width="1320" height="639" alt="image" src="https://github.com/user-attachments/assets/2fcf5385-29bd-473d-991b-38d544643da0" /> 
+<img width="1152" height="745" alt="image" src="https://github.com/user-attachments/assets/2910de3b-609e-4da3-bed6-a1429d41a731" /> <img width="1245" height="740" alt="image" src="https://github.com/user-attachments/assets/c37f5153-6e80-4dae-ad7f-4e1e6fce786b" /> 
+<img width="1131" height="645" alt="image" src="https://github.com/user-attachments/assets/c9dc41dc-09bd-49fc-aff2-b7eec94944e7" />
+
+
+
+
+*
 
 ## Setup
 
